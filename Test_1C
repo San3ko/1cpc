@@ -1,0 +1,7 @@
+cd C:\temp
+$app = Start-Process totalcmd -passthru
+Wait-Process $app.Id
+$app.Id > PID.ini
+Start-Sleep 120
+kill $app.id
+kill $PID
