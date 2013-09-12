@@ -1,7 +1,5 @@
-cd C:\temp
-$app = Start-Process totalcmd -passthru
-Wait-Process $app.Id
-$app.Id > PID.ini
-Start-Sleep 120
-kill $app.id
+$app = Start-Process cmd -PassThru
+$app.Id > C:\temp\PID.ini
+$appid = Get-Content C:\temp\PID.ini
+kill $appid
 kill $PID
