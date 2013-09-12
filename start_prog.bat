@@ -1,0 +1,1 @@
+start /wait C:\Users\Ivan\Desktop\iperf.exe -c 192.168.1.35
