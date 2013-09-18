@@ -8,10 +8,7 @@ $dir = "C:\temp\update"
 #====VAR
 	$request = 0
 	$marker = 1
-#====LOG ENTRY
-	"===============" >> $dir\update.log
-	$date = date
-	"$date | Starting script" >> $dir\update.log
+	$log_step = 0
 #====FUNCTIONS
 function check {
 	$checkdir = Test-Path $dir
@@ -29,8 +26,8 @@ function check {
 }
 function start_exe {
 	0 > $dir\end.ini
-	$date = date
-	"$date | Starting exe file" >> $dir\update.log
+	$log_step = 1
+	log_entry
 	$app = start-process $exefile $arguments -PassThru
 	$app.Id > $dir\PID.ini
 	}
@@ -43,15 +40,30 @@ function wait_marker {
 	sleep 5				#in seconds. set other if need
 }
 function kill_exe {
-	$date = date
-	"$date | Killing exe by PID" >> $dir\update.log
+	$log_step = 2
+	log_entry
 	$appid = Get-Content $dir\PID.ini
 	kill $appid
 	0 > $dir\end.ini
 	kill $PID
 }
-#=====SCRIPT
+function log_entry {
+	$date = date
+	switch ($log_step) 
+    { 
+        0 {
+		"===============" >> $dir\update.log
+		"$date | Starting script" >> $dir\update.log} 
+		1 {
+		"$date | Starting exe file" >> $dir\update.log}
+		2 {
+		"$date | Killing exe by PID" >> $dir\update.log}
+        default {"The color could not be determined."}
+    }
+}
+#==================SCRIPT
 check
+log_entry
 start_exe
 wait_marker
 kill_exe
