@@ -1,25 +1,33 @@
-program test;
+Program changer;
 uses crt;
-var
-    f: file of char;
-    l: text;
-    st,st2,dir1,dir2,dir: string;
-    i, n: byte;
+var	f:file of char;
+	l:text;
+	dir,lpath,endpath,pid,str2: string;
+	i,n: byte;
+Procedure getdir;
+	begin
+		if ParamStr(1) = '-dir' then
+      		dir:=paramstr(2);
+	end;
+Procedure getpid;
+	begin
+		lpath:=(dir+'\lastpid.ini');
+		assign (l, lpath);
+			reset (l);
+			readln (l, pid);
+			readln (l, str2);
+		close (l);
+	end;
+Procedure change;
+	begin
+		endpath:=(dir+'\'+pid+'\end.ini');
+		assign (f, endpath);
+			rewrite (f);
+			write (f, '1');
+		close (f);
+	end;
 begin
-   if ParamStr(1) = '-dir' then
-   begin
-      dir:=paramstr(2);
-      dir1:=(dir+'\lastpid.ini');
-    assign (l, dir1);
-      reset (l);
-      readln (l, st);
-      readln (l, st2);
-    close (l);
-    dir2:=(st+'\'+st2+'\end.ini');
-    delay(20);
-    assign (f, dir2);
-       rewrite (f);
-       write (f, '1');
-    close (f);
-    end;
+	getdir;
+	getpid;
+	change;
 end.
